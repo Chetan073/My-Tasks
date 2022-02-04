@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.0;
 
-interface  ERC20{
+interface  IERC20{
     //function declaration for name of Token
     function name() external view  returns (string memory);
 
@@ -39,12 +39,13 @@ interface  ERC20{
 
 //conrtact for creating mty own token
 
-contract MyOwnToken is ERC20{
-    
-    string internal _nameOfToken;
-    string internal _sysmbolOfToken;
-    uint8 internal _decimalOfToken;
-    uint internal constant _totalSupply=150;
+contract ERC20 is IERC20{
+    //variable for store name of token
+    string private _nameOfToken;
+    //
+    string private _sysmbolOfToken;
+    uint8 private _decimalOfToken;
+    uint private _totalSupply;
     
     
     mapping(address=> uint) balances;
@@ -53,8 +54,9 @@ contract MyOwnToken is ERC20{
     constructor(){
         _sysmbolOfToken="UCG";
         _nameOfToken="My Token";
-        _decimalOfToken= 0;       
-
+        _decimalOfToken= 0; 
+        _totalSupply=0;      
+        
         
     }
     //function for returing the of my token
@@ -110,5 +112,22 @@ contract MyOwnToken is ERC20{
     //function for returns the amount which _spender is still allowed to withdraw from _owner.
     function allowance(address _owner, address _spender) public override view returns (uint256 remaining){
         return allowances[_spender][_owner];
+    }
+    //function for give inital supply
+    function _mint(address accountAddress, uint256 amount) internal {
+        require(accountAddress != address(0)); 
+        _totalSupply += amount;
+        balances[accountAddress] += amount;
+        emit Transfer(address(0), accountAddress, amount);
+
+        
+    }
+}
+//creating my contract  for my own token.
+contract MyOwnToken is ERC20{
+
+    constructor(uint256 initialSupply)  {
+        //calling a method with given total supply
+        _mint(msg.sender, initialSupply);
     }
 }
