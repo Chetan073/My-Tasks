@@ -42,13 +42,17 @@ interface  IERC20{
 contract ERC20 is IERC20{
     //variable for store name of token
     string private _nameOfToken;
-    //
+    //variable for store symbol of token
     string private _sysmbolOfToken;
+    //variable for store decimal value
     uint8 private _decimalOfToken;
+    //variable for store total supply of token
     uint private _totalSupply;
     
-    
+    //mapping for store a token with address
     mapping(address=> uint) balances;
+    //mapping a address with another mapping that
+    //map address with token
     mapping(address=>mapping(address=>uint256)) allowances;
 
     constructor(){
