@@ -52,6 +52,7 @@ contract BuySellToken{
     //function for to sell a token to recipient
     function sellTokenByAdmin(address _to,uint noOfToken) external {        
         require(_to!=address(0),"You can not use default address");
+        require(msg.sender==ownerAddress,"You are not admin");
         require(balances[ownerAddress]>=noOfToken,"Insufficient token");       
         balances[ownerAddress]-=noOfToken;
         balances[_to]+=noOfToken;
@@ -118,12 +119,13 @@ contract BuySellToken{
     function _mint(uint mintToken) external {
         require(msg.sender==ownerAddress,"You are not admin");        
         _totalSupply=_totalSupply+ mintToken;
-        balances[ownerAddress]+=(mintToken)/_etherPrice;
+        balances[ownerAddress]+=mintToken;
         emit Transfer(address(0),ownerAddress,mintToken);
 
     }
     //function for burn token from total supply
     function _burn(uint burnToken) external{
+        require(msg.sender==ownerAddress,"You are not admin");
         require(balances[ownerAddress]>=burnToken,"burn amount exceeds balance");
         balances[ownerAddress]-=burnToken;
         _totalSupply-=burnToken;
