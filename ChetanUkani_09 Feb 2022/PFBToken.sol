@@ -66,7 +66,7 @@ contract PFBToken is ERC20{
     function supplyByOwner()external payable checkForAdmin{        
         require(msg.value>0,"You can not supply with zero value");
         _totalSupply=msg.value/_tokenPrice;
-        balance[msg.sender]=_totalSupply;
+        balance[msg.sender]+=_totalSupply;
         emit Transaction(ownerAddress,balance[msg.sender],"Token supplied");
     }
 
